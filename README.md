@@ -14,9 +14,9 @@ Libraries and frameworks
 Set up a virtual environment: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
 
 Install dependencies:
-- `pip install pandas` nebo `pip3 install pandas`
-- `pip install Flask` nebo `pip3 install Flask`
-- `pip install matplotlib` nebo `pip3 install matplotlib` for chart generation 
+- `pip install pandas` or `pip3 install pandas`
+- `pip install Flask` or `pip3 install Flask`
+- `pip install matplotlib` or `pip3 install matplotlib` for chart generation 
 (not needed for running the app)
 
 After installation run: `python main.py` or `python3 main.py` 
