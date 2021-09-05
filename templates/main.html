@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Top(k) Threshold</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="{{ url_for('static', filename='bootstrap-5.0.0-beta3-dist/css/bootstrap.min.css') }}" rel="stylesheet">
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
+</head>
+</html>
+
+<h1 class="display-4 text-center">Showcase of Threshold Top(k)</h1>
+
+
+<div class="container-fluid">
+
+	<form action="/" method="get">
+		<div class="input-group mb-3">
+			<!-- Iterate over columns except the world_rank index column and aggregate calculated column -->
+			{% for column in columns if column != "world_rank" and column != "aggregate" and column != "institution" %}
+				<div class="form-group" style="margin-right: 10px">
+					<div class="form-check">
+						{% if column in request.args.getlist("sort_by") %}
+							<input checked name="sort_by" class="form-check-input" type="checkbox" value="{{ column }}">
+						{% else %}
+							<input name="sort_by" class="form-check-input" type="checkbox" value="{{ column }}">
+						{% endif %}
+						<label class="form-check-label">
+							{{ column }}
+						</label>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+
+		<div class="input-group mb-3">
+			<div class="input-group-prepend">
+				<label class="input-group-text" for="aggregateFuncSelect">Aggregate function options</label>
+			</div>
+			<select name="aggregateFuncSelect" id="aggregateFuncSelect" class="form-select" aria-label="">7
+				{% if request.args.get("aggregateFuncSelect") == "max" or None %}
+					<option selected value="max">Max</option>
+				{% else %}
+					<option value="max">Max</option>
+				{% endif %}
+
+				{% if request.args.get("aggregateFuncSelect") == "avg" %}
+					<option selected value="avg">Average</option>
+				{% else %}
+					<option value="avg">Average</option>
+				{% endif %}
+			</select>
+
+			<div class="input-group-prepend">
+				<label class="input-group-text" for="queryMethodSelect">Query method options</label>
+			</div>
+			<select name="queryMethodSelect" id="queryMethodSelect" class="form-select" aria-label="">7
+				{% if request.args.get("queryMethodSelect") == "top_k_threshold" or None %}
+					<option selected value="top_k_threshold">Top K Threshold</option>
+				{% else %}
+					<option value="top_k_threshold">Top K Threshold</option>
+				{% endif %}
+
+				{% if request.args.get("queryMethodSelect") == "sequential" %}
+					<option selected value="sequential">Naive Sequential</option>
+				{% else %}
+					<option value="sequential">Naive Sequential</option>
+				{% endif %}
+			</select>
+
+			<input type="number"  class="form-control" id="k-amount" name="kAmount" value="{{ k_amount }}"
+				   placeholder="K - records amount">
+		</div>
+
+		<div class="input-group mb-3" style="float: right">
+			<button class="btn btn-primary" type="submit">Submit</button>
+		</div>
+	</form>
+
+	<table class="table table-dark table-striped mt-5">
+	  <thead>
+		<tr>
+			{% for column in columns %}
+			  <th>{{ column }}</th>
+			{% endfor %}
+		</tr>
+	  </thead>
+	  <tbody>
+		  {% for uni in data %}
+		   <tr>
+			   <th>{{ uni.id }}</th>
+			   <th>{{ uni.name }}</th>
+			   <th>{{ uni.national_rank }}</th>
+			   <th>{{ uni.education_quality }}</th>
+			   <th>{{ uni.alumni_employment }}</th>
+			   <th>{{ uni.faculty_quality }}</th>
+			   <th>{{ uni.publications }}</th>
+			   <th>{{ uni.influence }}</th>
+			   <th>{{ uni.citations }}</th>
+			   <th>{{ uni.impact }}</th>
+			   <th>{{ uni.patents }}</th>
+			   <th>{{ uni.aggregate_rank }}</th>
+		   </tr>
+		  {% endfor %}
+	  </tbody>
+	</table>
+
+	<p>Top K search took {{ time_elapsed }} seconds</p>
+	<p>Data source was queried {{ data_access_counter }} times</p>
+</div>
+
